@@ -30,13 +30,13 @@ namespace ATH_Hostel.Controllers
                   new HostelViewModel
                     {
                     Id = 3,
-                    Name = "Bielsko Hostel",
-                    Address = "ul.Willowa 52",
-                    City = "Bielsko-Biała",
+                    Name = "Kato Hostel",
+                    Address = "ul.Piłsudzkiego 11",
+                    City = "Katowice",
                     Description = "Stunning hostel for a cheap price",
                     ImagePaths = new List<string>()
                     {
-                    "img1.jpg", "img2.jpg"
+                    "img7.jpg", "img3.jpg"
                     }
                   }
             };

@@ -22,19 +22,7 @@ namespace ATH_Hostel.Controllers
         
         public ActionResult Index()
         {
-            //var viewModels = new HostelViewModel
-            //{
-            //    Id = 1,
-            //    Name = "Bielsko Hostel",
-            //    Address = "ul.Willowa 52",
-            //    City = "Bielsko-Biała",
-            //    Description = "Stunning hostel for a cheap price",
-            //    ImagePaths = new List<string>()
-            //    {
-            //        "img1.jpg", "img2.jpg"
-            //    }
-            //};
-            //return View(viewModels);
+
             return View();
         }
 
