@@ -1,4 +1,5 @@
 ﻿using ATH_Hostel.Models;
+using ATH_Hostel.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,10 +17,24 @@ namespace ATH_Hostel.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-        }
+        }        
 
-        public IActionResult Index()
+        
+        public ActionResult Index()
         {
+            //var viewModels = new HostelViewModel
+            //{
+            //    Id = 1,
+            //    Name = "Bielsko Hostel",
+            //    Address = "ul.Willowa 52",
+            //    City = "Bielsko-Biała",
+            //    Description = "Stunning hostel for a cheap price",
+            //    ImagePaths = new List<string>()
+            //    {
+            //        "img1.jpg", "img2.jpg"
+            //    }
+            //};
+            //return View(viewModels);
             return View();
         }
 

@@ -2,6 +2,10 @@
 {
     public class HostelItemViewModel
     {
+        public HostelItemViewModel()
+        {
+
+        }
         public HostelItemViewModel(HostelViewModel hostelViewModel)
         {
             this.Hostel = hostelViewModel;
