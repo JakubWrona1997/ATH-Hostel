@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ATH_Hostel.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,9 @@ namespace ATH_Hostel.Infrastructure
         {
 
         }
+        public DbSet<Hostel> Hostels { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Renting> Rentings { get; set; }
+        public DbSet<Room> Rooms { get; set; }
     }
 }
