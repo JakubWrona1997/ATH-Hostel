@@ -7,23 +7,30 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ATH_Hostel.Infrastructure;
 using ATH_Hostel.Infrastructure.Models;
+using ATH_Hostel.Infrastructure.Enums;
+using AutoMapper;
+using ATH_Hostel.ViewModels;
 
 namespace ATH_Hostel.Controllers
 {
     public class RoomsController : Controller
     {
         private readonly HostelDBContext _context;
+        private readonly IMapper _mapper;
 
-        public RoomsController(HostelDBContext context)
+        public RoomsController(HostelDBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
-            var hostelDBContext = _context.Rooms.Include(r => r.Hostel);
-            return View(await hostelDBContext.ToListAsync());
+            var hostelDBContext = await _context.Rooms.Include(r => r.Hostel).ToListAsync();
+            var roomlItemViewModel = _mapper.Map<List<RoomItemViewModel>>(hostelDBContext);
+
+            return View(roomlItemViewModel);
         }
 
         // GET: Rooms/Details/5
@@ -37,18 +44,21 @@ namespace ATH_Hostel.Controllers
             var room = await _context.Rooms
                 .Include(r => r.Hostel)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (room == null)
+
+            var roomlViewModel = _mapper.Map<RoomViewModel>(room);
+            if (roomlViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(room);
+            return View(roomlViewModel);
         }
 
         // GET: Rooms/Create
         public IActionResult Create()
         {
             ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id");
+            ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View();
         }
 
@@ -66,6 +76,7 @@ namespace ATH_Hostel.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", room.HostelId);
+            ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View(room);
         }
 
@@ -76,13 +87,14 @@ namespace ATH_Hostel.Controllers
             {
                 return NotFound();
             }
-
+            
             var room = await _context.Rooms.FindAsync(id);
             if (room == null)
             {
                 return NotFound();
             }
             ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", room.HostelId);
+            ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View(room);
         }
 
@@ -119,6 +131,7 @@ namespace ATH_Hostel.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", room.HostelId);
+            ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View(room);
         }
 

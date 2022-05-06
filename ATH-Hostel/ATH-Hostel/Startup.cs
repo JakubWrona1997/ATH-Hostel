@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ATH_Hostel
@@ -29,6 +30,7 @@ namespace ATH_Hostel
             services.AddDbContext<HostelDBContext>(options =>
               options.UseInMemoryDatabase("ATHHostel")
             );
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddControllersWithViews();
         }
 
