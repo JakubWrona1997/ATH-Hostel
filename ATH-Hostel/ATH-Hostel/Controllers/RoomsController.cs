@@ -10,6 +10,7 @@ using ATH_Hostel.Infrastructure.Models;
 using ATH_Hostel.Infrastructure.Enums;
 using AutoMapper;
 using ATH_Hostel.ViewModels;
+using ATH_Hostel.ViewModels.Room;
 
 namespace ATH_Hostel.Controllers
 {
@@ -67,17 +68,18 @@ namespace ATH_Hostel.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,HostelId,PriceForNight,BedsAmount,RoomType")] Room room)
-        {
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,HostelId,PriceForNight,BedsAmount,RoomType")] CreateRoomViewModel roomViewModel)
+        {            
             if (ModelState.IsValid)
             {
+                var room = _mapper.Map<Room>(roomViewModel);
                 _context.Add(room);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", room.HostelId);
+            ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", roomViewModel.HostelId);
             ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
-            return View(room);
+            return View(roomViewModel);
         }
 
         // GET: Rooms/Edit/5
@@ -89,13 +91,15 @@ namespace ATH_Hostel.Controllers
             }
             
             var room = await _context.Rooms.FindAsync(id);
-            if (room == null)
+            var editRoom = _mapper.Map<EditRoomViewModel>(room);
+
+            if (editRoom == null)
             {
                 return NotFound();
             }
-            ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", room.HostelId);
+            //ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", room.HostelId);
             ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
-            return View(room);
+            return View(editRoom);
         }
 
         // POST: Rooms/Edit/5
@@ -103,9 +107,9 @@ namespace ATH_Hostel.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,HostelId,PriceForNight,BedsAmount,RoomType")] Room room)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,PriceForNight,BedsAmount,RoomType")] EditRoomViewModel editRoomViewModel)
         {
-            if (id != room.Id)
+            if (id != editRoomViewModel.Id)
             {
                 return NotFound();
             }
@@ -114,12 +118,13 @@ namespace ATH_Hostel.Controllers
             {
                 try
                 {
-                    _context.Update(room);
+                    var roomEdit = _mapper.Map<Room>(editRoomViewModel);
+                    _context.Update(roomEdit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RoomExists(room.Id))
+                    if (!RoomExists(editRoomViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -130,9 +135,9 @@ namespace ATH_Hostel.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", room.HostelId);
+            //ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", editRoomViewModel.HostelId);
             ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
-            return View(room);
+            return View(editRoomViewModel);
         }
 
         // GET: Rooms/Delete/5

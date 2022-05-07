@@ -1,4 +1,5 @@
-﻿@model ATH_Hostel.Infrastructure.Models.Room
+﻿@using ATH_Hostel.ViewModels.Room
+@model EditRoomViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -22,11 +23,6 @@
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HostelId" class="control-label"></label>
-                <select asp-for="HostelId" class="form-control" asp-items="ViewBag.HostelId"></select>
-                <span asp-validation-for="HostelId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PriceForNight" class="control-label"></label>
