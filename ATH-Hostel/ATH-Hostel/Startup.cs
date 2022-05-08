@@ -1,5 +1,8 @@
+using ATH_Hostel.Contracts;
 using ATH_Hostel.Infrastructure;
 using ATH_Hostel.Infrastructure.FakeData;
+using ATH_Hostel.Infrastructure.Repositories;
+using ATH_Hostel.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +33,8 @@ namespace ATH_Hostel
             services.AddDbContext<HostelDBContext>(options =>
               options.UseInMemoryDatabase("ATHHostel")
             );
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IHostelRepository, HostelRepository>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddControllersWithViews();
         }

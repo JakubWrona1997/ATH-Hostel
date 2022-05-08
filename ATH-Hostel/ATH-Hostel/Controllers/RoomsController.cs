@@ -18,10 +18,12 @@ namespace ATH_Hostel.Controllers
     public class RoomsController : Controller
     {
         private readonly IRoomRepository _roomRepository;
+        private readonly IHostelRepository _hostelRepository;
 
-        public RoomsController(IRoomRepository roomRepository)
+        public RoomsController(IRoomRepository roomRepository, IHostelRepository hostelRepository)
         {
             _roomRepository = roomRepository;
+            _hostelRepository = hostelRepository;
         }
 
         // GET: Rooms
@@ -53,7 +55,7 @@ namespace ATH_Hostel.Controllers
         // GET: Rooms/Create
         public IActionResult Create()
         {
-            ViewData["HostelId"] = new SelectList(_roomRepository.GetAllRooms().Result, "Id", "Id");
+            ViewData["HostelId"] = new SelectList(_hostelRepository.GetAllHostels().Result, "Id", "Name");
             ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View();
         }
@@ -67,12 +69,10 @@ namespace ATH_Hostel.Controllers
         {
             if (ModelState.IsValid)
             {
-                var room = _mapper.Map<Room>(roomViewModel);
-                _context.Add(room);
-                await _context.SaveChangesAsync();
+                await _roomRepository.CreateRoom(roomViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HostelId"] = new SelectList(_roomRepository.GetAllRooms().Result, "Id", "Id", roomViewModel.HostelId);
+            ViewData["HostelId"] = new SelectList(_hostelRepository.GetAllHostels().Result, "Id", "Name");
             ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View(roomViewModel);
         }
@@ -84,9 +84,8 @@ namespace ATH_Hostel.Controllers
             {
                 return NotFound();
             }
-
-            var room = await _context.Rooms.FindAsync(id);
-            var editRoom = _mapper.Map<EditRoomViewModel>(room);
+            
+            var editRoom = await _roomRepository.GetRoomToEdit((int)id);
 
             if (editRoom == null)
             {
@@ -113,15 +112,7 @@ namespace ATH_Hostel.Controllers
             {
                 try
                 {
-                    var room = await _context.Rooms.FindAsync(id);
-
-                    room.Name = editRoomViewModel.Name;
-                    room.Description = editRoomViewModel.Description;
-                    room.PriceForNight = editRoomViewModel.PriceForNight;
-                    room.BedsAmount = editRoomViewModel.BedsAmount;
-                    room.RoomType = editRoomViewModel.RoomType;
-
-                    await _context.SaveChangesAsync();
+                    await _roomRepository.EditRoom(editRoomViewModel, id);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -149,9 +140,7 @@ namespace ATH_Hostel.Controllers
                 return NotFound();
             }
 
-            var room = await _context.Rooms
-                .Include(r => r.Hostel)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var room = await _roomRepository.GetRoomById((int)id);
             if (room == null)
             {
                 return NotFound();
@@ -165,15 +154,13 @@ namespace ATH_Hostel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var room = await _context.Rooms.FindAsync(id);
-            _context.Rooms.Remove(room);
-            await _context.SaveChangesAsync();
+            await _roomRepository.DeleteRoom(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool RoomExists(int id)
         {
-            return _context.Rooms.Any(e => e.Id == id);
+            return _roomRepository.GetAllRooms().Result.Any(e => e.Id == id);
         }
     }
 }
