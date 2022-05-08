@@ -2,7 +2,7 @@
 {
     public class RoomItemViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public decimal PriceForNight { get; set; }
         public int BedsAmount { get; set; }
