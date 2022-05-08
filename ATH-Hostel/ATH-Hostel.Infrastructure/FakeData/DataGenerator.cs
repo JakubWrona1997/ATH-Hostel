@@ -24,6 +24,14 @@ namespace ATH_Hostel.Infrastructure.FakeData
                         City = "Bielsko-Biała",
                         Address = "ul. Willowa 52",
                         Description = "Main Hostel"
+                    },
+                    new Hostel
+                    {
+                        Id= 2,
+                        Name = "Katowice Hostel",
+                        City = "Katowice",
+                        Address = "ul. Polska 12",
+                        Description = "Second hostel"
                     }
                     );
                 context.Rooms.AddRange(

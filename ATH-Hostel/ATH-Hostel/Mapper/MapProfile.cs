@@ -15,7 +15,7 @@ namespace ATH_Hostel.MapperProfile
 
             CreateMap<Room, CreateRoomViewModel>().ReverseMap();
 
-            CreateMap<Room, EditRoomViewModel>().ReverseMap();
+            CreateMap<EditRoomViewModel, Room>().ReverseMap();                
         }
     }
 }

@@ -11,25 +11,23 @@ using ATH_Hostel.Infrastructure.Enums;
 using AutoMapper;
 using ATH_Hostel.ViewModels;
 using ATH_Hostel.ViewModels.Room;
+using ATH_Hostel.Contracts;
 
 namespace ATH_Hostel.Controllers
 {
     public class RoomsController : Controller
     {
-        private readonly HostelDBContext _context;
-        private readonly IMapper _mapper;
+        private readonly IRoomRepository _roomRepository;
 
-        public RoomsController(HostelDBContext context, IMapper mapper)
+        public RoomsController(IRoomRepository roomRepository)
         {
-            _context = context;
-            _mapper = mapper;
+            _roomRepository = roomRepository;
         }
 
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
-            var hostelDBContext = await _context.Rooms.Include(r => r.Hostel).ToListAsync();
-            var roomlItemViewModel = _mapper.Map<List<RoomItemViewModel>>(hostelDBContext);
+            var roomlItemViewModel = await _roomRepository.GetAllRooms();
 
             return View(roomlItemViewModel);
         }
@@ -42,23 +40,20 @@ namespace ATH_Hostel.Controllers
                 return NotFound();
             }
 
-            var room = await _context.Rooms
-                .Include(r => r.Hostel)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            var roomlViewModel = _mapper.Map<RoomViewModel>(room);
-            if (roomlViewModel == null)
+            var roomViewModel = await _roomRepository.GetRoomById((int)id);
+            
+            if (roomViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(roomlViewModel);
+            return View(roomViewModel);
         }
 
         // GET: Rooms/Create
         public IActionResult Create()
         {
-            ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id");
+            ViewData["HostelId"] = new SelectList(_roomRepository.GetAllRooms().Result, "Id", "Id");
             ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View();
         }
@@ -69,7 +64,7 @@ namespace ATH_Hostel.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,HostelId,PriceForNight,BedsAmount,RoomType")] CreateRoomViewModel roomViewModel)
-        {            
+        {
             if (ModelState.IsValid)
             {
                 var room = _mapper.Map<Room>(roomViewModel);
@@ -77,7 +72,7 @@ namespace ATH_Hostel.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", roomViewModel.HostelId);
+            ViewData["HostelId"] = new SelectList(_roomRepository.GetAllRooms().Result, "Id", "Id", roomViewModel.HostelId);
             ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View(roomViewModel);
         }
@@ -89,7 +84,7 @@ namespace ATH_Hostel.Controllers
             {
                 return NotFound();
             }
-            
+
             var room = await _context.Rooms.FindAsync(id);
             var editRoom = _mapper.Map<EditRoomViewModel>(room);
 
@@ -118,8 +113,14 @@ namespace ATH_Hostel.Controllers
             {
                 try
                 {
-                    var roomEdit = _mapper.Map<Room>(editRoomViewModel);
-                    _context.Update(roomEdit);
+                    var room = await _context.Rooms.FindAsync(id);
+
+                    room.Name = editRoomViewModel.Name;
+                    room.Description = editRoomViewModel.Description;
+                    room.PriceForNight = editRoomViewModel.PriceForNight;
+                    room.BedsAmount = editRoomViewModel.BedsAmount;
+                    room.RoomType = editRoomViewModel.RoomType;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -135,7 +136,7 @@ namespace ATH_Hostel.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", editRoomViewModel.HostelId);
+            //ViewData["HostelId"] = new SelectList(_context.Hostels, "Id", "Id", editRoomViewModel.Id);
             ViewData["RoomType"] = new SelectList(Enum.GetValues(typeof(RoomType)));
             return View(editRoomViewModel);
         }
