@@ -48,11 +48,14 @@ namespace ATH_Hostel.Infrastructure.Repositories
             {
                 throw new NullReferenceException();
             }
-            room.Name = roomViewModel.Name;
-            room.Description = roomViewModel.Description;
-            room.PriceForNight = roomViewModel.PriceForNight;
-            room.BedsAmount = roomViewModel.BedsAmount;
-            room.RoomType = roomViewModel.RoomType;
+            var result = _mapper.Map<EditRoomViewModel, Room>(roomViewModel, room);
+            _dbContext.Rooms.Update(result);
+
+            //room.Name = roomViewModel.Name;
+            //room.Description = roomViewModel.Description;
+            //room.PriceForNight = roomViewModel.PriceForNight;
+            //room.BedsAmount = roomViewModel.BedsAmount;
+            //room.RoomType = roomViewModel.RoomType;
 
             await _dbContext.SaveChangesAsync();
         }

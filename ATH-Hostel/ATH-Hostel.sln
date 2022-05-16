@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATH-Hostel", "ATH-Hostel\ATH-Hostel.csproj", "{75763B5C-5ADB-4FCC-8411-C956F4323615}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATH-Hostel.Infrastructure", "ATH-Hostel.Infrastructure\ATH-Hostel.Infrastructure.csproj", "{17081B91-A420-4B45-86C3-58918C37B0E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATH-Hostel.Infrastructure", "ATH-Hostel.Infrastructure\ATH-Hostel.Infrastructure.csproj", "{17081B91-A420-4B45-86C3-58918C37B0E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,7 +16,7 @@ namespace ATH_Hostel.Infrastructure.Models
         public DateTimeOffset EndDate { get; set; }
         public RentStatus Status { get; set; }
         [ForeignKey("User")]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
         [ForeignKey("Room")]
         public int RoomId { get; set; }

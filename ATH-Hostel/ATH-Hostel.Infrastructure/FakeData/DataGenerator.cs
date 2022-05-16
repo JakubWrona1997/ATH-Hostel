@@ -54,13 +54,13 @@ namespace ATH_Hostel.Infrastructure.FakeData
                         BeginDate = new DateTimeOffset(2022, 04, 12, 12, 32, 00, TimeSpan.Zero),
                         EndDate = new DateTimeOffset(2022, 04, 15, 12, 32, 00, TimeSpan.Zero),
                         RoomId = 1,
-                        UserId = 1
+                        UserId = Guid.NewGuid().ToString()
                     }
                     );
                 context.Users.AddRange(
                     new User
                     {
-                        Id = 1,
+                        Id = Guid.NewGuid().ToString(),
                         Name = "Jakub",
                         Email = "jakub@gmail.com",
                     }
