@@ -1,11 +1,13 @@
 using ATH_Hostel.Contracts;
 using ATH_Hostel.Infrastructure;
 using ATH_Hostel.Infrastructure.FakeData;
+using ATH_Hostel.Infrastructure.Models;
 using ATH_Hostel.Infrastructure.Repositories;
 using ATH_Hostel.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +35,12 @@ namespace ATH_Hostel
             services.AddDbContext<HostelDBContext>(options =>
               options.UseInMemoryDatabase("ATHHostel")
             );
+
+            services.AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<HostelDBContext>()
+            .AddDefaultUI()
+            .AddDefaultTokenProviders();
+
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IHostelRepository, HostelRepository>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -58,13 +66,18 @@ namespace ATH_Hostel
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapRazorPages();
             });
         }
     }

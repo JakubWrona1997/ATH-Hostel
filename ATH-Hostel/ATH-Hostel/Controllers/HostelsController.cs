@@ -11,7 +11,7 @@ namespace ATH_Hostel.Controllers
     public class HostelsController : Controller
     {
         // GET: HostelsController
-        public ActionResult GetHostels()
+        public ActionResult Index()
         {
             var viewModels = new List<HostelViewModel>()
             {
@@ -58,7 +58,7 @@ namespace ATH_Hostel.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(GetHostels));
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -79,7 +79,7 @@ namespace ATH_Hostel.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(GetHostels));
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -100,7 +100,7 @@ namespace ATH_Hostel.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(GetHostels));
+                return RedirectToAction(nameof(Index));
             }
             catch
             {

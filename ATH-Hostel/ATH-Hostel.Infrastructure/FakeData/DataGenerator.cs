@@ -1,4 +1,5 @@
 ﻿using ATH_Hostel.Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,7 +28,7 @@ namespace ATH_Hostel.Infrastructure.FakeData
                     },
                     new Hostel
                     {
-                        Id= 2,
+                        Id = 2,
                         Name = "Katowice Hostel",
                         City = "Katowice",
                         Address = "ul. Polska 12",
