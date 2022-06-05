@@ -12,6 +12,7 @@ using AutoMapper;
 using ATH_Hostel.ViewModels;
 using ATH_Hostel.ViewModels.Room;
 using ATH_Hostel.Contracts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ATH_Hostel.Controllers
 {
@@ -43,7 +44,7 @@ namespace ATH_Hostel.Controllers
             }
 
             var roomViewModel = await _roomRepository.GetRoomById((int)id);
-            
+
             if (roomViewModel == null)
             {
                 return NotFound();
@@ -53,6 +54,7 @@ namespace ATH_Hostel.Controllers
         }
 
         // GET: Rooms/Create
+        [Authorize(Roles = "Admin, Staff")]
         public IActionResult Create()
         {
             ViewData["HostelId"] = new SelectList(_hostelRepository.GetAllHostels().Result, "Id", "Name");
@@ -65,6 +67,7 @@ namespace ATH_Hostel.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Staff")]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,HostelId,PriceForNight,BedsAmount,RoomType")] CreateRoomViewModel roomViewModel)
         {
             if (ModelState.IsValid)
@@ -78,6 +81,7 @@ namespace ATH_Hostel.Controllers
         }
 
         // GET: Rooms/Edit/5
+        [Authorize(Roles = "Admin, Staff")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -101,6 +105,7 @@ namespace ATH_Hostel.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Staff")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,PriceForNight,BedsAmount,RoomType")] EditRoomViewModel editRoomViewModel)
         {
             if (id != editRoomViewModel.Id)
@@ -133,6 +138,7 @@ namespace ATH_Hostel.Controllers
         }
 
         // GET: Rooms/Delete/5
+        [Authorize(Roles = "Admin, Staff")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -152,6 +158,7 @@ namespace ATH_Hostel.Controllers
         // POST: Rooms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Staff")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _roomRepository.DeleteRoom(id);

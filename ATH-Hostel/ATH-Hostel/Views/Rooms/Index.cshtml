@@ -1,15 +1,22 @@
-﻿@using ATH_Hostel.ViewModels
+﻿@using ATH_Hostel.Infrastructure.Models
+@using ATH_Hostel.ViewModels
+@using Microsoft.AspNetCore.Identity
 @model IEnumerable<RoomItemViewModel>
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
-<p>
+ @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("Manager"))
+{
+ <p>
     <a asp-action="Create">Create New</a>
 </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -21,6 +28,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BedsAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HostelName)
             </th>
             <th></th>
         </tr>
@@ -39,9 +49,17 @@
                     @Html.DisplayFor(modelItem => item.BedsAmount)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @Html.DisplayFor(modelItem => item.HostelName)
+                </td>
+                <td>
+                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> @("|")
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> @("|")
+                    }
+
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>  
+                                     
                 </td>
             </tr>
         }

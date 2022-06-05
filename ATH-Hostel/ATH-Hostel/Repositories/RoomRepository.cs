@@ -69,6 +69,11 @@ namespace ATH_Hostel.Infrastructure.Repositories
             }
             var roomlItemViewModel = _mapper.Map<List<RoomItemViewModel>>(hostelDBContext);
 
+            foreach (var room in roomlItemViewModel)
+            {
+                var item = _dbContext.Hostels.FirstOrDefault(r => r.Id == room.HostelId);
+                room.HostelName = item.Name;
+            }
             return roomlItemViewModel;
         }
 
@@ -82,6 +87,8 @@ namespace ATH_Hostel.Infrastructure.Repositories
                 return null;
             }
             var roomlViewModel = _mapper.Map<RoomViewModel>(room);
+
+            roomlViewModel.HostelName = room.Hostel.Name;
 
             return roomlViewModel;
         }

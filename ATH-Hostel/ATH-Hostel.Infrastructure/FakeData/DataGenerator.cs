@@ -45,6 +45,26 @@ namespace ATH_Hostel.Infrastructure.FakeData
                         BedsAmount = 1,
                         HostelId = 1,
                         RoomType = Enums.RoomType.Standard
+                    },
+                    new Room
+                    {
+                        Id = 2,
+                        Name = "Premium Room",
+                        Description = "Room for one person",
+                        PriceForNight = 99,
+                        BedsAmount = 1,
+                        HostelId = 1,
+                        RoomType = Enums.RoomType.Exclusive
+                    },
+                    new Room
+                    {
+                        Id = 3,
+                        Name = "Casual room 1",
+                        Description = "Room for one person",
+                        PriceForNight = 50,
+                        BedsAmount = 1,
+                        HostelId = 2,
+                        RoomType = Enums.RoomType.Standard
                     }
                     );
                 context.Rentings.AddRange(
