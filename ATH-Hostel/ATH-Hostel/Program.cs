@@ -29,6 +29,7 @@ namespace ATH_Hostel
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await RolesSeeder.SeedRolesAsync(userManager, roleManager);
+                    await UsersSeeder.SeedUsersWithRoles(userManager, roleManager);
                     DataGenerator.Initialize(services);
                 }
                 catch (Exception ex)

@@ -57,15 +57,7 @@ namespace ATH_Hostel.Infrastructure.FakeData
                         RoomId = 1,
                         UserId = Guid.NewGuid().ToString()
                     }
-                    );
-                context.Users.AddRange(
-                    new User
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Name = "Jakub",
-                        Email = "jakub@gmail.com",
-                    }
-                    );
+                    );             
                 context.SaveChanges();
             }
         }

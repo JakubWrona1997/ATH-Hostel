@@ -24,6 +24,7 @@ namespace ATH_Hostel.Areas.Identity.Pages.Account.Manage
         }
 
         public string Username { get; set; }
+        public string Name { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -42,7 +43,9 @@ namespace ATH_Hostel.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var name = user.Name; 
 
+            Name = name;
             Username = userName;
 
             Input = new InputModel
